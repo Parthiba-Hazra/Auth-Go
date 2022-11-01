@@ -9,16 +9,15 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/Parthiba-Hazra/auth-go/handler"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	router := gin.Default()
 
-	router.GET("/api/account", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"server": "ready",
-		})
+	handler.CreateHandler(&handler.Config{
+		E: router,
 	})
 
 	srv := http.Server{
@@ -37,7 +36,7 @@ func main() {
 	// Wait until any kill signal
 	quit := make(chan os.Signal)
 
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(quit, syscall.SIGABRT, syscall.SIGINT, syscall.SIGTERM)
 
 	<-quit
 

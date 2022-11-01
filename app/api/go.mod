@@ -1,4 +1,4 @@
-module github.com/Parthiba-Hazra/manager
+module github.com/Parthiba-Hazra/auth-go
 
 go 1.19
 
