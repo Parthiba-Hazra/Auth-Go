@@ -1,0 +1,34 @@
+version: "3.8"
+services:
+  reverse-proxy:
+    # The official traefik docker image
+    image: traefik:v2.9.4
+    # Configure the web ui to tell traefik to listen docker
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker"
+      - "--providers.docker.exposedByDefault=false"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      # For traefik can listen to the docker
+      - /var/run/docker.sock:/var/run/docker.sock
+  api:
+    build:
+      context: ./api
+      target: builder
+    image: api
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`parhaz.test`) && PathPrefix(`/account`)"
+    expose:
+      - "8080"
+    environment:
+      - ENV=dev
+    env_file:
+      - .env.dev
+    volumes:
+      - ./api:/go/src/app
+    # Used $$ sign so that docker doesn't substitute a variable
+    command: reflex -r "\.go$$" -s -- sh -c "go run ./"
