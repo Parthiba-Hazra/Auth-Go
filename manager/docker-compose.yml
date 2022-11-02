@@ -14,21 +14,19 @@ services:
     volumes:
       # For traefik can listen to the docker
       - /var/run/docker.sock:/var/run/docker.sock
-  api:
+  account:
     build:
-      context: ./api
+      context: ./account
       target: builder
-    image: api
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host(`parhaz.test`) && PathPrefix(`/account`)"
+    image: account
     expose:
       - "8080"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.account.rule=Host(`parhaz.test`) && PathPrefix(`/api/account`)"
     environment:
       - ENV=dev
-    env_file:
-      - .env.dev
     volumes:
-      - ./api:/go/src/app
+      - ./account:/go/src/app
     # Used $$ sign so that docker doesn't substitute a variable
     command: reflex -r "\.go$$" -s -- sh -c "go run ./"
