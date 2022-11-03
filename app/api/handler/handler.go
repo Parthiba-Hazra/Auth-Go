@@ -4,21 +4,24 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/Parthiba-Hazra/auth-go/models"
 	"github.com/gin-gonic/gin"
 )
 
 // This struct hold all values that needed to initialize the routes
 type Config struct {
-	E *gin.Engine
+	E           *gin.Engine
+	UserService models.UserService
 }
 
 // This struct hold service properties for handler can run
 type Handler struct {
+	UserService models.UserService
 }
 
 // This function intialize the routes
 func CreateHandler(c *Config) {
-	newH := &Handler{}
+	newH := &Handler{UserService: c.UserService}
 
 	newRoute := c.E.Group(os.Getenv("APP_API_URL"))
 
@@ -31,11 +34,6 @@ func CreateHandler(c *Config) {
 	newRoute.DELETE("/image", newH.DeleteImg)
 	newRoute.PUT("/myDetails", newH.MyDetails)
 
-}
-
-// Show user's details
-func (h *Handler) MyAccount(c *gin.Context) {
-	c.JSON(http.StatusOK, "It's your details")
 }
 
 func (h *Handler) SignUp(c *gin.Context) {
