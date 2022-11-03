@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 )
 
@@ -65,3 +66,66 @@ func ErrorStatus(err error) int {
 }
 
 // Error functions -- >>
+
+func NewInvalidReq(cause string) *Error {
+	return &Error{
+		Type:    ErrInvalidRequest,
+		Message: fmt.Sprintf("Invalid request, cause: %v", cause),
+	}
+}
+
+func NewAuthorizationErr(cause string) *Error {
+	return &Error{
+		Type:    ErrUnauthorizedClient,
+		Message: cause,
+	}
+}
+
+func NewAcessDenied(cause string) *Error {
+	return &Error{
+		Type:    ErrAccessDenied,
+		Message: fmt.Sprintf("Server refuse to authorize the request, cause: %v", cause),
+	}
+}
+
+func NewUnsupportedResonse(cause string) *Error {
+	return &Error{
+		Type:    ErrUnsupportedResponseType,
+		Message: fmt.Sprintf("Unsupported response type, cause: %v", cause),
+	}
+}
+
+func NewInvalidScope(cause string) *Error {
+	return &Error{
+		Type:    ErrInvalidScope,
+		Message: fmt.Sprintf("Bad request , cause: %v", cause),
+	}
+}
+
+func NewServerErr() *Error {
+	return &Error{
+		Type:    ErrServerError,
+		Message: fmt.Sprintf("Internal server error"),
+	}
+}
+
+func NewErrNotFound(name string, value string) *Error {
+	return &Error{
+		Type:    ErrNotFound,
+		Message: fmt.Sprintf("cant found %v resourses with value %v", name, value),
+	}
+}
+
+func NewErrConflict(name string, value string) *Error {
+	return &Error{
+		Type:    ErrConflict,
+		Message: fmt.Sprintf("%v resourses with value %v, already exist", name, value),
+	}
+}
+
+func NewErrPauloadLarge(maxSize int64, currentSize int64) *Error {
+	return &Error{
+		Type:    ErrPayloadTooLarge,
+		Message: fmt.Sprintf("Current playload size %v, exceed max size %v", currentSize, maxSize),
+	}
+}
