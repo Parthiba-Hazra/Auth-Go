@@ -1,4 +1,4 @@
-package test
+package mocks
 
 import (
 	"context"
@@ -8,11 +8,11 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-type TestService struct {
+type MockUserService struct {
 	mock.Mock
 }
 
-func (m *TestService) Get(c context.Context, id uuid.UUID) (*models.User, error) {
+func (m *MockUserService) Get(c context.Context, id uuid.UUID) (*models.User, error) {
 
 	var rc0 *models.User
 	r_call := m.Called(c, id)
