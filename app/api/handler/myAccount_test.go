@@ -23,6 +23,8 @@ func TestMyAcc(t *testing.T) {
 
 	t.Run("Sucess",
 		func(t *testing.T) {
+
+			// Create a new random id
 			uid, err := uuid.NewRandom()
 
 			if err != nil {
